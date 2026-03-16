@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MONSUA AMERICA | High-End Fashion</title>
+  <style>
+    /* ================= BASE / VARIABLES ================= */
+    :root {
+      --font-primary: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-secondary: "Georgia", serif;
+      --color-bg: #ffffff;
+      --color-text: #111111;
+      --color-text-muted: #666666;
+      --color-border: #e5e5e5;
+      --color-accent: #000000;
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --z-nav: 100;
+      --z-drawer: 200;
+      --z-modal: 300;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+    img { max-width: 100%; display: block; object-fit: cover; }
+
+    /* ================= TYPOGRAPHY ================= */
+    h1, h2, h3 { font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .title-lg { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; }
+    .title-md { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+    .text-sm { font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ================= BUTTONS & UI ================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: var(--transition);
+      border: 1px solid var(--color-accent);
+    }
+    .btn-primary { background: var(--color-accent); color: #fff; }
+    .btn-primary:hover { background: #333; border-color: #333; }
+    .btn-secondary { background: transparent; color: var(--color-accent); }
+    .btn-secondary:hover { background: var(--color-accent); color: #fff; }
+    .btn-full { width: 100%; }
+
+    .badge {
+      position: absolute; top: 10px; left: 10px;
+      background: #fff; color: #000;
+      font-size: 0.7rem; padding: 4px 8px;
+      text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em;
+    }
+
+    /* ================= NAVIGATION ================= */
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem 2rem; z-index: var(--z-nav);
+      transition: var(--transition);
+    }
+    header.scrolled { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; }
+    
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .nav-links a:hover { opacity: 0.6; }
+    
+    .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.2em; text-align: center; }
+    
+    .nav-actions { display: flex; gap: 1.5rem; align-items: center; }
+    .cart-btn { position: relative; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .cart-count {
+      position: absolute; top: -8px; right: -12px;
+      background: var(--color-accent); color: #fff;
+      font-size: 0.65rem; width: 18px; height: 18px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ================= HERO SECTION ================= */
+    .hero {
+      height: 100vh; width: 100%;
+      background: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop') center/cover no-parallax;
+      position: relative;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    .hero::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
+    .hero-content { position: relative; z-index: 2; color: #fff; max-width: 800px; padding: 2rem; }
+    .hero-content h1 { margin-bottom: 1rem; }
+    .hero-content p { font-size: 1.2rem; margin-bottom: 2rem; font-family: var(--font-secondary); font-style: italic; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; }
+    .hero-actions .btn { border-color: #fff; }
+    .hero-actions .btn-secondary { color: #fff; }
+    .hero-actions .btn-secondary:hover { background: #fff; color: #000; }
+
+    /* ================= SOCIAL PROOF ================= */
+    .social-proof {
+      background: #f9f9f9; padding: 1.5rem 0; border-bottom: 1px solid var(--color-border);
+      display: flex; justify-content: center; gap: 4rem; align-items: center; flex-wrap: wrap;
+    }
+    .social-proof span { font-size: 0.85rem; letter-spacing: 0.1em; color: var(--color-text-muted); text-transform: uppercase; }
+    .social-proof strong { color: var(--color-accent); }
+
+    /* ================= CATEGORY GRID ================= */
+    .section { padding: 5rem 2rem; max-width: 1400px; margin: 0 auto; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
+    
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .category-card { position: relative; height: 60vh; overflow: hidden; group; cursor: pointer; }
+    .category-card img { height: 100%; transition: transform 0.7s ease; }
+    .category-card:hover img { transform: scale(1.05); }
+    .category-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%); }
+    .category-info { position: absolute; bottom: 2rem; left: 2rem; z-index: 2; color: #fff; }
+    .category-info h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .category-info span { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 5px; }
+
+    /* ================= BESTSELLERS (SCROLL) ================= */
+    .product-scroll { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 2rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .product-scroll::-webkit-scrollbar { display: none; }
+    .product-card { flex: 0 0 300px; scroll-snap-align: start; position: relative; }
+    .product-img-wrapper { position: relative; overflow: hidden; margin-bottom: 1rem; background: #f5f5f5; aspect-ratio: 3/4; }
+    .product-img-wrapper .hover-img { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; }
+    .product-card:hover .hover-img { opacity: 1; }
+    
+    .quick-add-btn {
+      position: absolute; bottom: -50px; left: 0; width: 100%;
+      background: rgba(255,255,255,0.95); padding: 15px; text-align: center;
+      text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;
+      transition: var(--transition); cursor: pointer; border-top: 1px solid var(--color-border);
+    }
+    .product-card:hover .quick-add-btn { bottom: 0; }
+    .quick-add-btn:hover { background: #000; color: #fff; }
+
+    .product-meta { display: flex; justify-content: space-between; align-items: flex-start; }
+    .product-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.25rem; cursor: pointer; }
+    .product-price { font-size: 0.95rem; color: var(--color-text-muted); }
+
+    /* ================= STORY TEASER ================= */
+    .story-teaser {
+      text-align: center; padding: 6rem 2rem; background: #fbfbfb;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .story-teaser h2 { margin-bottom: 1.5rem; }
+    .story-teaser p { font-family: var(--font-secondary); font-size: 1.25rem; max-width: 600px; line-height: 1.8; color: var(--color-text-muted); margin-bottom: 2.5rem; }
+
+    /* ================= FOOTER ================= */
+    footer { background: #000; color: #fff; padding: 4rem 2rem 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; max-width: 1400px; margin: 0 auto; margin-bottom: 4rem;}
+    .footer-col h4 { font-size: 0.85rem; margin-bottom: 1.5rem; color: #999; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.8rem; }
+    .footer-col a { font-size: 0.9rem; color: #ccc; transition: color 0.2s; }
+    .footer-col a:hover { color: #fff; }
+    .newsletter-form { display: flex; margin-top: 1rem; border-bottom: 1px solid #555; padding-bottom: 5px; }
+    .newsletter-form input { background: transparent; border: none; color: #fff; outline: none; flex: 1; font-size: 0.9rem; }
+    .newsletter-form button { color: #fff; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
+    .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #333; font-size: 0.8rem; color: #666; }
+
+    /* ================= OVERLAYS (CART & MODAL) ================= */
+    .overlay-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+      z-index: var(--z-drawer); opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .overlay-backdrop.active { opacity: 1; pointer-events: all; }
+
+    /* Cart Drawer */
+    .cart-drawer {
+      position: fixed; top: 0; right: -450px; width: 100%; max-width: 450px; height: 100vh;
+      background: #fff; z-index: calc(var(--z-drawer) + 1); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: flex; flex-direction: column; box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+    }
+    .cart-drawer.open { transform: translateX(-450px); }
+    .drawer-header { padding: 1.5rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; }
+    .close-btn { font-size: 1.5rem; line-height: 1; padding: 5px; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .cart-item { display: flex; gap: 1rem; }
+    .cart-item img { width: 80px; height: 100px; object-fit: cover; }
+    .cart-item-info { flex: 1; display: flex; flex-direction: column; }
+    .cart-item-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 5px;}
+    .cart-item-meta { font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: auto;}
+    .qty-controls { display: flex; align-items: center; gap: 10px; border: 1px solid var(--color-border); width: fit-content; padding: 2px 8px; font-size: 0.85rem;}
+    .drawer-footer { padding: 1.5rem; border-top: 1px solid var(--color-border); background: #fafafa; }
+    .cart-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; }
+    .cart-upsell { font-size: 0.8rem; background: #eee; padding: 10px; text-align: center; margin-bottom: 1rem; border-radius: 4px;}
+
+    /* PDP Quick View Modal */
+    .pdp-modal {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
+      width: 90%; max-width: 900px; background: #fff; z-index: calc(var(--z-modal) + 1);
+      display: flex; opacity: 0; pointer-events: none; transition: var(--transition);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh;
+    }
+    .pdp-modal.open { transform: translate(-50%, -50%); opacity: 1; pointer-events: all; }
+    .pdp-gallery { flex: 1; background: #f5f5f5; }
+    .pdp-gallery img { height: 100%; width: 100%; object-fit: cover; max-height: 90vh; }
+    .pdp-info { flex: 1; padding: 3rem; display: flex; flex-direction: column; overflow-y: auto; position: relative;}
+    .pdp-info h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .pdp-price { font-size: 1.2rem; color: var(--color-text-muted); margin-bottom: 2rem; }
+    .size-selector { margin-bottom: 2rem; }
+    .size-selector .header { display: flex; justify-content: space-between; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px;}
+    .size-btn-group { display: flex; gap: 10px; }
+    .size-btn { border: 1px solid var(--color-border); padding: 10px; flex: 1; text-align: center; cursor: pointer; transition: 0.2s;}
+    .size-btn:hover, .size-btn.selected { border-color: #000; background: #000; color: #fff; }
+    .pdp-desc { margin-top: 2rem; font-size: 0.9rem; color: var(--color-text-muted); border-top: 1px solid var(--color-border); padding-top: 1.5rem; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; }
+
+    /* Email Popup */
+    .email-popup {
+      position: fixed; bottom: 2rem; right: 2rem; width: 350px; background: #fff;
+      padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: var(--z-modal);
+      transform: translateY(20px); opacity: 0; pointer-events: none; transition: var(--transition);
+      border: 1px solid var(--color-border);
+    }
+    .email-popup.show { transform: translateY(0); opacity: 1; pointer-events: all; }
+    .email-popup h3 { margin-bottom: 10px; font-size: 1.2rem; }
+    .email-popup p { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 15px; }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 900px) {
+      .category-grid { grid-template-columns: 1fr; }
+      .category-card { height: 40vh; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .pdp-modal { flex-direction: column; max-height: 85vh; overflow-y: auto; }
+      .pdp-gallery { min-height: 300px; }
+      .pdp-info { padding: 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-actions { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cart-drawer.open { transform: translateX(-100vw); }
+      .cart-drawer { right: -100vw; max-width: 100vw; }
+      .email-popup { width: calc(100% - 2rem); right: 1rem; bottom: 1rem; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header id="header">
+    <nav class="nav-links">
+      <a href="#">Shop</a>
+      <a href="#">Collections</a>
+      <a href="#">Editorial</a>
+    </nav>
+    <div class="logo">MONSUA</div>
+    <div class="nav-actions">
+      <button class="cart-btn" onclick="toggleCart()">
+        Cart <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="title-lg">Define Your Legacy</h1>
+        <p>The FW25 Collection. Crafted for those who move the world.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="document.getElementById('bestsellers').scrollIntoView({behavior: 'smooth'})">Shop New Arrivals</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('story').scrollIntoView({behavior: 'smooth'})">Explore the Brand</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SOCIAL PROOF ================= -->
+    <section class="social-proof">
+      <span>Featured in <strong>Vogue</strong></span>
+      <span>Recognized by <strong>GQ</strong></span>
+      <span>10k+ <strong>5-Star Reviews</strong></span>
+      <span>Sustainably <strong>Sourced</strong></span>
+    </section>
+
+    <!-- ================= CATEGORY GRID ================= -->
+    <section class="section">
+      <div class="category-grid">
+        <div class="category-card" onclick="alert('Navigating to Menswear...')">
+          <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=800&auto=format&fit=crop" alt="Men">
+          <div class="category-info">
+            <h3>Menswear</h3>
+            <span>Explore &rarr;</span>
+          </div>
+        </div>
+        <div class="category-card" onclick="alert('Navigating to Womenswear...')">
+          <img src="https://images.unsplash.com/photo-1550614000-4b95d466bcbe?q=80&w=800&auto=format&fit=crop" alt="Women">
+          <div class="category-info">
+            <h3>Womenswear</h3>
+            <span>Explore &rarr;</span>
+          </div>
+        </div>
+        <div class="category-card" onclick="alert('Navigating to Accessories...')">
+          <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=800&auto=format&fit=crop" alt="Accessories">
+          <div class="category-info">
+            <h3>Accessories</h3>
+            <span>Explore &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BESTSELLERS ================= -->
+    <section class="section" id="bestsellers">
+      <div class="section-header">
+        <h2 class="title-md">Trending Now</h2>
+        <a href="#" class="text-sm">Shop All &rarr;</a>
+      </div>
+      
+      <div class="product-scroll" id="product-container">
+        <!-- Products injected via JS -->
+      </div>
+    </section>
+
+    <!-- ================= BRAND STORY TEASER ================= -->
+    <section class="section story-teaser" id="story">
+      <h2>The Monsua Ethos</h2>
+      <p>"We don't just design garments; we architect confidence. Every thread, every cut, and every silhouette is meticulously engineered in our studios to transcend seasonal trends and become a permanent fixture in your personal legacy."</p>
+      <button class="btn btn-secondary">Read Our Story</button>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>JOIN MONSUA</h4>
+        <p style="color:#ccc; font-size:0.9rem; margin-bottom:1rem; line-height:1.5;">Subscribe for 15% off your first purchase, exclusive access to drops, and editorial insights.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Email Address">
+          <button>Submit</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>SHOP</h4>
+        <ul>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Menswear</a></li>
+          <li><a href="#">Womenswear</a></li>
+          <li><a href="#">Accessories</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>BRAND</h4>
+        <ul>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Materials</a></li>
+          <li><a href="#">Lookbooks</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>SUPPORT</h4>
+        <ul>
+          <li><a href="#">My Account</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 MONSUA AMERICA. All rights reserved. Designed for conversion.
+    </div>
+  </footer>
+
+  <!-- ================= OVERLAYS ================= -->
+  <div class="overlay-backdrop" id="backdrop" onclick="closeAllOverlays()"></div>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3 style="font-size:1.2rem;">Your Bag (<span id="drawer-count">0</span>)</h3>
+      <button class="close-btn" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-upsell">✨ Add $50 more to unlock <strong>Free Expedited Shipping</strong>.</div>
+    <div class="cart-items" id="cart-items">
+      <!-- Items injected via JS -->
+    </div>
+    <div class="drawer-footer">
+      <div class="cart-total">
+        <span>Subtotal</span>
+        <span id="cart-total-price">$0.00</span>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="alert('Proceeding to Checkout Flow...')">Secure Checkout</button>
+    </div>
+  </div>
+
+  <!-- Quick View Modal (PDP) -->
+  <div class="pdp-modal" id="pdp-modal">
+    <button class="modal-close" onclick="closePDP()">&times;</button>
+    <div class="pdp-gallery">
+      <img id="pdp-img" src="" alt="Product">
+    </div>
+    <div class="pdp-info">
+      <div class="badge" id="pdp-badge" style="position:relative; display:inline-block; top:0; left:0; margin-bottom:10px; width:fit-content; border:1px solid #000;">Selling Fast</div>
+      <h2 id="pdp-title">Product Title</h2>
+      <div class="pdp-price" id="pdp-price">$0.00</div>
+      
+      <div class="size-selector">
+        <div class="header">
+          <span>Select Size</span>
+          <a href="#" style="text-decoration:underline; color:#666;">Size Guide</a>
+        </div>
+        <div class="size-btn-group">
+          <button class="size-btn">S</button>
+          <button class="size-btn selected">M</button>
+          <button class="size-btn">L</button>
+          <button class="size-btn">XL</button>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary btn-full" id="pdp-add-btn" onclick="addToCartFromPDP()">Add to Bag</button>
+      
+      <div class="pdp-desc">
+        <p style="margin-bottom:10px;"><strong>Description:</strong> Crafted from premium organic cotton, this signature piece offers a tailored yet relaxed silhouette. Built to endure and designed to elevate your daily wardrobe.</p>
+        <ul style="list-style:disc; padding-left:20px;">
+          <li>100% Organic Heavyweight Cotton</li>
+          <li>Relaxed, dropped shoulder fit</li>
+          <li>Made ethically in Portugal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email Capture Popup -->
+  <div class="email-popup" id="email-popup">
+    <button class="close-btn" style="position:absolute; top:10px; right:10px;" onclick="closeEmailPopup()">&times;</button>
+    <h3>Unlock 15% Off</h3>
+    <p>Join the Monsua inner circle for early access to drops and exclusive offers.</p>
+    <div class="newsletter-form" style="margin-top:0;">
+      <input type="email" placeholder="Email Address" style="color:#000; border-bottom:1px solid #ccc;">
+      <button style="color:#000;" onclick="closeEmailPopup()">Join</button>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    // Mock Product Data
+    const products = [
+      { id: 1, name: "The Essential Trench", price: 395, img1: "https://images.unsplash.com/photo-1520975954732-57dd22299614?q=80&w=600&auto=format&fit=crop", img2: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", badge: "Low Stock" },
+      { id: 2, name: "Merino Wool Rollneck", price: 185, img1: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=600&auto=format&fit=crop", img2: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=600&auto=format&fit=crop", badge: "" },
+      { id: 3, name: "Tailored Wide-Leg Trouser", price: 245, img1: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop", img2: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=600&auto=format&fit=crop", badge: "Best Seller" },
+      { id: 4, name: "Signature Leather Tote", price: 450, img1: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=600&auto=format&fit=crop", img2: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop", badge: "" },
+      { id: 5, name: "Minimalist Blazer", price: 320, img1: "https://images.unsplash.com/photo-1550614000-4b95d466bcbe?q=80&w=600&auto=format&fit=crop", img2: "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?q=80&w=600&auto=format&fit=crop", badge: "New In" }
+    ];
+
+    // State
+    let cart = [];
+    let currentActiveProduct = null;
+
+    // Initialize Products
+    function renderProducts() {
+      const container = document.getElementById('product-container');
+      container.innerHTML = products.map(p => `
+        <div class="product-card">
+          <div class="product-img-wrapper" onclick="openPDP(${p.id})">
+            ${p.badge ? `<div class="badge">${p.badge}</div>` : ''}
+            <img src="${p.img1}" alt="${p.name}">
+            <img src="${p.img2}" class="hover-img" alt="${p.name} Alt">
+            <div class="quick-add-btn" onclick="event.stopPropagation(); quickAdd(${p.id})">Quick Add - $${p.price}</div>
+          </div>
+          <div class="product-meta">
+            <div>
+              <h4 class="product-title" onclick="openPDP(${p.id})">${p.name}</h4>
+              <div class="text-sm" style="color:#999;">Black / Sand</div>
+            </div>
+            <div class="product-price">$${p.price}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Scroll Header Effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+
+    // Cart Functions
+    function toggleCart() {
+      const drawer = document.getElementById('cart-drawer');
+      const backdrop = document.getElementById('backdrop');
+      const isOpen = drawer.classList.contains('open');
+      
+      if (isOpen) {
+        drawer.classList.remove('open');
+        backdrop.classList.remove('active');
+      } else {
+        drawer.classList.add('open');
+        backdrop.classList.add('active');
+        closePDP(); // close modal if open
+      }
+    }
+
+    function quickAdd(id) {
+      const product = products.find(p => p.id === id);
+      addToCart(product, 'M'); // Default size for quick add
+      toggleCart();
+    }
+
+    function addToCart(product, size) {
+      const existing = cart.find(item => item.id === product.id && item.size === size);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, size, qty: 1 });
+      }
+      updateCartUI();
+    }
+
+    function removeCartItem(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function updateQty(index, delta) {
+      if (cart[index].qty + delta > 0) {
+        cart[index].qty += delta;
+      } else {
+        removeCartItem(index);
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      // Counters
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cart-count').innerText = count;
+      document.getElementById('drawer-count').innerText = count;
+
+      // Items
+      const container = document.getElementById('cart-items');
+      if (cart.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#999; margin-top:2rem;">Your bag is currently empty.</p>`;
+      } else {
+        container.innerHTML = cart.map((item, idx) => `
+          <div class="cart-item">
+            <img src="${item.img1}" alt="${item.name}">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-meta">Size: ${item.size}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="qty-controls">
+                  <button onclick="updateQty(${idx}, -1)">&minus;</button>
+                  <span style="margin: 0 10px;">${item.qty}</span>
+                  <button onclick="updateQty(${idx}, 1)">&plus;</button>
+                </div>
+                <div style="font-weight:500;">$${item.price * item.qty}</div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      document.getElementById('cart-total-price').innerText = `$${total.toFixed(2)}`;
+    }
+
+    // PDP Modal Functions
+    function openPDP(id) {
+      currentActiveProduct = products.find(p => p.id === id);
+      
+      document.getElementById('pdp-img').src = currentActiveProduct.img1;
+      document.getElementById('pdp-title').innerText = currentActiveProduct.name;
+      document.getElementById('pdp-price').innerText = `$${currentActiveProduct.price}`;
+      
+      const badge = document.getElementById('pdp-badge');
+      if(currentActiveProduct.badge) {
+        badge.style.display = 'inline-block';
+        badge.innerText = currentActiveProduct.badge;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      document.getElementById('pdp-modal').classList.add('open');
+      document.getElementById('backdrop').classList.add('active');
+    }
+
+    function closePDP() {
+      document.getElementById('pdp-modal').classList.remove('open');
+      if(!document.getElementById('cart-drawer').classList.contains('open')) {
+        document.getElementById('backdrop').classList.remove('active');
+      }
+    }
+
+    function addToCartFromPDP() {
+      // Grab selected size
+      const selectedBtn = document.querySelector('.size-btn.selected');
+      const size = selectedBtn ? selectedBtn.innerText : 'M';
+      addToCart(currentActiveProduct, size);
+      closePDP();
+      setTimeout(toggleCart, 100);
+    }
+
+    // Size selector logic
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+        e.target.classList.add('selected');
+      });
+    });
+
+    // Email Popup Logic (Exit Intent / Timed)
+    function closeEmailPopup() {
+      document.getElementById('email-popup').classList.remove('show');
+    }
+
+    setTimeout(() => {
+      if(!document.getElementById('backdrop').classList.contains('active')) {
+        document.getElementById('email-popup').classList.add('show');
+      }
+    }, 5000); // Shows after 5 seconds
+
+    // Global Overlay Close
+    function closeAllOverlays() {
+      document.getElementById('cart-drawer').classList.remove('open');
+      document.getElementById('pdp-modal').classList.remove('open');
+      document.getElementById('backdrop').classList.remove('active');
+    }
+
+    // Init
+    renderProducts();
+    updateCartUI();
+
+  </script>
+</body>
+</html>
